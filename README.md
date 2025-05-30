@@ -41,6 +41,18 @@
             "11. 你不到不得已不做出确定的选择，这不是因为选择困难症, 而是你觉得前面总有更好的选择等着你",
             "12. 你喜欢听不同的方案和想法，并思考他们是否合理或他们的可行性"
         ];
+
+        const questionVars = [
+            "Te+", "Te+", "Ni+", "Ni+", "Ni+", "Si+", "Si+", "Si-", "Se+", "Ne+", "Ne+", "Ne+"
+        ];
+
+        const varNames = [
+            "Ne+", "Ne-", "Ni+", "Ni-", "Fe+", "Fe-", "Fi+", "Fi-", "Ti+", "Ti-", "Te+", "Te-", "Si+", "Si-", "Se+", "Se-"
+        ];
+        let varScores = {};
+        varNames.forEach(name => varScores[name] = 0);
+
+
         const options = [
             { text: "非常同意", value: 5},
             { text: "同意", value: 3},
@@ -73,5 +85,55 @@
                 <div class="error" style="color:yellow;">${errorMsg}</div>
             `;
         }
+        function prevQuestion() {
+            saveAnswer();
+            if (current > 0) {
+                current--;
+                showQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) {
+                showQuestion('请先选择一个选项');
+                return;
+            }
+            saveAnswer();
+            if (current < questions.length - 1) {
+                current++;
+                showQuestion();
+            } else {
+                submitQuiz();
+            }
+        }
+
+        function saveAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (selected) {
+                answers[current] = Number(selected.value);
+            }
+        }
+
+        // 统计分数
+function submitQuiz() {
+    // 先清零
+    varNames.forEach(name => varScores[name] = 0);
+    // 累加每题分数到对应变量
+    answers.forEach((score, idx) => {
+        if (score !== null) {
+            varScores[questionVars[idx]] += score;
+        }
+    });
+    // 展示结果
+    document.getElementById('quiz-container').innerHTML = `
+        <h1>测试完成！</h1>
+        <p>各变量得分：</p>
+        <ul>
+            ${Object.entries(varScores).map(([k, v]) => `<li>${k}: ${v}</li>`).join('')}
+        </ul>
+    `;
+}
+
     </script>
 </html>
