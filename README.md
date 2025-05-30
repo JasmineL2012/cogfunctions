@@ -104,11 +104,11 @@
             transform: scale(1.06);
             border: 2px solid #fff;
         }
-        .option-btn.red    { background: #ff4e50; }
-        .option-btn.orange { background: #ffb347; color: #222; }
+        .option-btn.red    { background:rgb(180, 65, 67); }
+        .option-btn.orange { background:rgb(221, 169, 95); color: #222; }
         .option-btn.gray   { background: #e0e0e0; color: #222; }
-        .option-btn.blue   { background: #00b894; }
-        .option-btn.green  { background: #00c853; }
+        .option-btn.blue   { background:rgb(75, 166, 148); }
+        .option-btn.green  { background:rgb(98, 178, 131); }
         .option-btn:hover:not(:disabled) {
             filter: brightness(1.08) saturate(1.2);
             transform: scale(1.08);
