@@ -1,21 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>荣格八维认知功能测试</title>
+         <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>荣格八维认知功能测试</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: blueviolet;
-            color: antiquewhite;
-            text-align: center;
-            padding: 50px;
+            font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif;
+            background: linear-gradient(135deg, #7f53ac 0%, #647dee 100%);
+            color: #fff;
+            min-height: 100vh;
             margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #quiz-container {
+            background: rgba(255,255,255,0.12);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 18px;
+            padding: 36px 28px 28px 28px;
+            max-width: 420px;
+            width: 100%;
+            margin: 24px;
+            backdrop-filter: blur(6px);
         }
         h1 {
-            font-size: 2em;
-            color: bisque;
+            font-size: 1.6em;
+            color: #ffe7ba;
+            margin-bottom: 0.5em;
+        }
+         p {
+            font-size: 1.1em;
+            margin-bottom: 1.2em;
+        }
+        .options label {
+            display: block;
+            background: rgba(255,255,255,0.18);
+            border-radius: 8px;
+            margin: 10px 0;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 1em;
+        }
+        .options input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #7f53ac;
+        }
+        .options label:hover, .options input[type="radio"]:checked + span {
+            background: rgba(255,255,255,0.28);
+        }
+        .btn-group {
+            margin-top: 18px;
+            display: flex;
+            justify-content: space-between;
+        }
+         button {
+            background: linear-gradient(90deg, #7f53ac 0%, #647dee 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 28px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 2px 8px rgba(127,83,172,0.15);
+        }
+        button:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+        }
+        button:not(:disabled):hover {
+            background: linear-gradient(90deg, #647dee 0%, #7f53ac 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+        .error {
+            color: #ffe066;
+            margin-top: 10px;
+            min-height: 24px;
+        }
+        .progress-bar {
+            width: 100%;
+            background: rgba(255,255,255,0.18);
+            border-radius: 6px;
+            height: 10px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ffe7ba 0%, #7f53ac 100%);
+            border-radius: 6px;
+            transition: width 0.3s;
+        }
+        ul {
+            text-align: left;
+            padding-left: 1.2em;
+        }
+        @media (max-width: 500px) {
+            #quiz-container {
+                padding: 18px 6px 18px 6px;
+            }
+            h1 { font-size: 1.2em; }
         }
         </style>
     </head>
@@ -137,3 +224,4 @@ function submitQuiz() {
 
     </script>
 </html>
+
