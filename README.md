@@ -104,11 +104,11 @@
             transform: scale(1.06);
             border: 2px solid #fff;
         }
-        .option-btn.red    { background: linear-gradient(90deg, #ff4e50 0%, #ff7675 100%); }
-        .option-btn.orange { background: linear-gradient(90deg, #ff7675 0%, #fbc531 100%); color: #222;}
-        .option-btn.gray   { background: linear-gradient(90deg, #e0e0e0 0%, #b2bec3 100%); color: #222;}
-        .option-btn.blue   { background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);}
-        .option-btn.green  { background: linear-gradient(90deg, #00b894 0%, #00ff99 100%);}
+        .option-btn.red    { background: #ff4e50; }
+        .option-btn.orange { background: #ffb347; color: #222; }
+        .option-btn.gray   { background: #e0e0e0; color: #222; }
+        .option-btn.blue   { background: #00b894; }
+        .option-btn.green  { background: #00c853; }
         .option-btn:hover:not(:disabled) {
             filter: brightness(1.08) saturate(1.2);
             transform: scale(1.08);
@@ -238,9 +238,15 @@
             `;
         }
 
+        // 自动跳下一题
         function selectOption(val) {
             answers[current] = val;
-            showQuestion();
+            if (current < questions.length - 1) {
+                current++;
+                showQuestion();
+            } else {
+                submitQuiz();
+            }
         }
 
         function prevQuestion() {
