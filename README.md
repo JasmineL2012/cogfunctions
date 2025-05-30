@@ -1,84 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-         <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
     <title>荣格八维认知功能测试</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 示例用 Unsplash 星空海面静图，建议你换成真实动图 GIF/MP4/WEBM 背景 -->
     <style>
-        body {
-            font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif;
-            background: linear-gradient(135deg, #7f53ac 0%, #647dee 100%);
-            color: #fff;
-            min-height: 100vh;
+        html, body {
+            height: 100%;
             margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 0;
         }
-        #quiz-container {
-            background: rgba(255,255,255,0.12);
+        body {
+            min-height: 100vh;
+            min-width: 100vw;
+            overflow-x: hidden;
+            background: #0a1833;
+            /* 用真实动图替换下方URL即可 */
+            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: bgmove 30s linear infinite alternate;
+        }
+        @keyframes bgmove {
+            0% { background-position: 50% 60%; }
+            100% { background-position: 50% 40%; }
+        }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10,24,51,0.55);
+            z-index: 0;
+        }
+        .center-card {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            background: rgba(255,255,255,0.13);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
             border-radius: 18px;
-            padding: 36px 28px 28px 28px;
-            max-width: 420px;
-            width: 100%;
-            margin: 24px;
-            backdrop-filter: blur(6px);
+            padding: 38px 32px 32px 32px;
+            max-width: 480px;
+            width: 90vw;
+            text-align: center;
+            z-index: 1;
+            backdrop-filter: blur(8px);
         }
-        h1 {
-            font-size: 1.6em;
-            color: #ffe7ba;
-            margin-bottom: 0.5em;
-        }
-         p {
-            font-size: 1.1em;
+        .title {
+            font-size: 2.1em;
+            font-weight: bold;
+            color: #f8f8ff;
+            letter-spacing: 2px;
             margin-bottom: 1.2em;
+            text-shadow: 0 2px 12px #222a;
         }
-        .options label {
-            display: block;
-            background: rgba(255,255,255,0.18);
-            border-radius: 8px;
-            margin: 10px 0;
-            padding: 10px 16px;
+        .start-btn, .option-btn, .nav-btn {
+            font-family: inherit;
+            font-size: 1.15em;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 32px;
+            margin: 18px 0 0 0;
+            background: linear-gradient(90deg, #fff 0%, #e0e0e0 100%);
+            color: #0a1833;
+            font-weight: bold;
+            box-shadow: 0 2px 12px rgba(10,24,51,0.10);
             cursor: pointer;
-            transition: background 0.2s;
-            font-size: 1em;
+            transition: background 0.18s, color 0.18s, transform 0.12s;
         }
-        .options input[type="radio"] {
-            margin-right: 10px;
-            accent-color: #7f53ac;
+        .start-btn:hover, .nav-btn:hover {
+            background: linear-gradient(90deg, #e0e0e0 0%, #fff 100%);
+            transform: translateY(-2px) scale(1.04);
         }
-        .options label:hover, .options input[type="radio"]:checked + span {
-            background: rgba(255,255,255,0.28);
+        .question-title {
+            font-size: 1.3em;
+            color: #fff;
+            margin-bottom: 1.2em;
+            text-shadow: 0 2px 8px #222a;
         }
-        .btn-group {
-            margin-top: 18px;
+        .options-row {
             display: flex;
             justify-content: space-between;
+            gap: 12px;
+            margin: 28px 0 18px 0;
         }
-         button {
-            background: linear-gradient(90deg, #7f53ac 0%, #647dee 100%);
-            color: #fff;
+        .option-btn {
+            flex: 1 1 0;
+            margin: 0;
+            padding: 16px 0;
+            font-size: 1.08em;
+            border-radius: 14px;
             border: none;
-            border-radius: 8px;
-            padding: 10px 28px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            box-shadow: 0 2px 8px rgba(127,83,172,0.15);
+            color: #fff;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(10,24,51,0.10);
+            transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
+            outline: none;
         }
-        button:disabled {
-            background: #bdbdbd;
+        .option-btn.selected, .option-btn:active {
+            box-shadow: 0 4px 18px 0 rgba(127,83,172,0.18);
+            transform: scale(1.06);
+            border: 2px solid #fff;
+        }
+        .option-btn.red    { background: linear-gradient(90deg, #ff4e50 0%, #ff7675 100%); }
+        .option-btn.orange { background: linear-gradient(90deg, #ff7675 0%, #fbc531 100%); color: #222;}
+        .option-btn.gray   { background: linear-gradient(90deg, #e0e0e0 0%, #b2bec3 100%); color: #222;}
+        .option-btn.blue   { background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);}
+        .option-btn.green  { background: linear-gradient(90deg, #00b894 0%, #00ff99 100%);}
+        .option-btn:hover:not(:disabled) {
+            filter: brightness(1.08) saturate(1.2);
+            transform: scale(1.08);
+        }
+        .option-btn:disabled {
+            opacity: 0.6;
             cursor: not-allowed;
         }
-        button:not(:disabled):hover {
-            background: linear-gradient(90deg, #647dee 0%, #7f53ac 100%);
-            transform: translateY(-2px) scale(1.03);
+        .nav-btn {
+            margin: 0 8px;
+            padding: 10px 28px;
+            background: linear-gradient(90deg, #fff 0%, #e0e0e0 100%);
+            color: #0a1833;
         }
-        .error {
-            color: #ffe066;
-            margin-top: 10px;
-            min-height: 24px;
+        .nav-btn:disabled {
+            background: #bdbdbd;
+            color: #fff;
+            cursor: not-allowed;
         }
         .progress-bar {
             width: 100%;
@@ -94,26 +142,33 @@
             border-radius: 6px;
             transition: width 0.3s;
         }
+        .error {
+            color: #ffe066;
+            margin-top: 10px;
+            min-height: 24px;
+        }
         ul {
             text-align: left;
             padding-left: 1.2em;
+            color: #fff;
         }
-        @media (max-width: 500px) {
-            #quiz-container {
-                padding: 18px 6px 18px 6px;
-            }
-            h1 { font-size: 1.2em; }
+        .result-title {
+            color: #ffe7ba;
+            margin-bottom: 1em;
         }
-        </style>
-    </head>
-    <body>
-      <div id="quiz-container">
-        <p>请点击下方按钮开始测试</p>
-        <button onclick="startTest()">开始测试</button>
-      </div>
-    </body>
-
+        @media (max-width: 600px) {
+            .center-card { padding: 18px 4vw 18px 4vw; }
+            .title { font-size: 1.2em; }
+            .question-title { font-size: 1em; }
+            .option-btn { font-size: 0.95em; padding: 12px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div id="quiz-app"></div>
     <script>
+        // 题目与变量
         const questions = [
             "1. 你相信很多行为、事情都可以分为符合标准、不符合标准的，而那些符合标准的是好的",
             "2. 你总是在追求公正客观的判断。比如你不在乎一个人偷东西是否迫不得已，他事实上就是做错了",
@@ -128,52 +183,67 @@
             "11. 你不到不得已不做出确定的选择，这不是因为选择困难症, 而是你觉得前面总有更好的选择等着你",
             "12. 你喜欢听不同的方案和想法，并思考他们是否合理或他们的可行性"
         ];
-
         const questionVars = [
             "Te+", "Te+", "Ni+", "Ni+", "Ni+", "Si+", "Si+", "Si-", "Se+", "Ne+", "Ne+", "Ne+"
         ];
-
         const varNames = [
             "Ne+", "Ne-", "Ni+", "Ni-", "Fe+", "Fe-", "Fi+", "Fi-", "Ti+", "Ti-", "Te+", "Te-", "Si+", "Si-", "Se+", "Se-"
         ];
         let varScores = {};
         varNames.forEach(name => varScores[name] = 0);
 
-
         const options = [
-            { text: "非常同意", value: 5},
-            { text: "同意", value: 3},
-            { text: "中立", value: 0},
-            { text: "不同意", value: -3},
-            { text: "非常不同意", value: -5}
+            { text: "非常不同意", value: -5, color: "red" },
+            { text: "不同意", value: -3, color: "orange" },
+            { text: "中立", value: 0, color: "gray" },
+            { text: "同意", value: 3, color: "blue" },
+            { text: "非常同意", value: 5, color: "green" }
         ];
-                let answers = new Array(questions.length).fill(null);
+
+        let answers = new Array(questions.length).fill(null);
         let current = 0;
 
-        function startTest() {
+        // 首页
+        function renderHome() {
+            document.getElementById('quiz-app').innerHTML = `
+                <div class="center-card">
+                    <div class="title">荣格八维认知功能测试</div>
+                    <p style="color:#f8f8ff;opacity:0.92;">探索你的认知风格，发现自我潜能</p>
+                    <button class="start-btn" onclick="startTest()">开始测试</button>
+                </div>
+            `;
+        }
+
+        // 题目页
+        function showQuestion(errorMsg = '') {
+            let progress = Math.round((current + 1) / questions.length * 100);
+            let optionsHtml = options.map((opt, idx) => `
+                <button
+                    class="option-btn ${opt.color} ${answers[current] === opt.value ? 'selected' : ''}"
+                    onclick="selectOption(${opt.value})"
+                    type="button"
+                >${opt.text}</button>
+            `).join('');
+            document.getElementById('quiz-app').innerHTML = `
+                <div class="center-card">
+                    <div class="progress-bar"><div class="progress" style="width:${progress}%;"></div></div>
+                    <div class="question-title">${questions[current]}</div>
+                    <div class="options-row">${optionsHtml}</div>
+                    <div class="btn-group" style="margin-top:24px;">
+                        <button class="nav-btn" onclick="prevQuestion()" ${current === 0 ? 'disabled' : ''}>上一题</button>
+                        <button class="nav-btn" onclick="nextQuestion()">${current === questions.length - 1 ? '提交' : '下一题'}</button>
+                    </div>
+                    <div class="error">${errorMsg}</div>
+                </div>
+            `;
+        }
+
+        function selectOption(val) {
+            answers[current] = val;
             showQuestion();
         }
 
-        function showQuestion(errorMsg = '') {
-            let optionsHtml = options.map((opt, idx) => `
-                <label>
-                    <input type="radio" name="answer" value="${opt.value}" ${answers[current] == opt.value ? 'checked' : ''}>
-                    ${opt.text}
-                </label>
-            `).join('<br>');
-            document.getElementById('quiz-container').innerHTML = `
-                <h1>第${current + 1}题</h1>
-                <p>${questions[current]}</p>
-                <div>${optionsHtml}</div>
-                <div class="btn-group">
-                    <button onclick="prevQuestion()" ${current === 0 ? 'disabled' : ''}>上一题</button>
-                    <button onclick="nextQuestion()">${current === questions.length - 1 ? '提交' : '下一题'}</button>
-                </div>
-                <div class="error" style="color:yellow;">${errorMsg}</div>
-            `;
-        }
         function prevQuestion() {
-            saveAnswer();
             if (current > 0) {
                 current--;
                 showQuestion();
@@ -181,12 +251,10 @@
         }
 
         function nextQuestion() {
-            const selected = document.querySelector('input[name="answer"]:checked');
-            if (!selected) {
+            if (answers[current] === null) {
                 showQuestion('请先选择一个选项');
                 return;
             }
-            saveAnswer();
             if (current < questions.length - 1) {
                 current++;
                 showQuestion();
@@ -195,33 +263,36 @@
             }
         }
 
-        function saveAnswer() {
-            const selected = document.querySelector('input[name="answer"]:checked');
-            if (selected) {
-                answers[current] = Number(selected.value);
-            }
+        function startTest() {
+            current = 0;
+            answers = new Array(questions.length).fill(null);
+            showQuestion();
         }
 
-        // 统计分数
-function submitQuiz() {
-    // 先清零
-    varNames.forEach(name => varScores[name] = 0);
-    // 累加每题分数到对应变量
-    answers.forEach((score, idx) => {
-        if (score !== null) {
-            varScores[questionVars[idx]] += score;
+        // 结果页
+        function submitQuiz() {
+            // 统计分数
+            varNames.forEach(name => varScores[name] = 0);
+            answers.forEach((score, idx) => {
+                if (score !== null) {
+                    varScores[questionVars[idx]] += score;
+                }
+            });
+            document.getElementById('quiz-app').innerHTML = `
+                <div class="center-card">
+                    <div class="result-title">测试完成！</div>
+                    <p style="margin-bottom:1em;">各变量得分：</p>
+                    <ul>
+                        ${Object.entries(varScores).map(([k, v]) => `<li><b>${k}</b>：${v}</li>`).join('')}
+                    </ul>
+                    <button class="start-btn" onclick="renderHome()">返回首页</button>
+                </div>
+            `;
         }
-    });
-    // 展示结果
-    document.getElementById('quiz-container').innerHTML = `
-        <h1>测试完成！</h1>
-        <p>各变量得分：</p>
-        <ul>
-            ${Object.entries(varScores).map(([k, v]) => `<li>${k}: ${v}</li>`).join('')}
-        </ul>
-    `;
-}
 
+        // 初始化
+        renderHome();
     </script>
+</body>
 </html>
 
