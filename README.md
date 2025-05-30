@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>荣格八维认知功能测试</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 示例用 Unsplash 星空海面静图，建议你换成真实动图 GIF/MP4/WEBM 背景 -->
     <style>
         html, body {
             height: 100%;
@@ -16,7 +15,6 @@
             min-width: 100vw;
             overflow-x: hidden;
             background: #0a1833;
-            /* 用真实动图替换下方URL即可 */
             background-image: url('https://cdn.pixabay.com/photo/2023/10/10/11/28/star-trails-8306233_1280.jpg');
             background-size: cover;
             background-position: center;
@@ -56,7 +54,7 @@
             margin-bottom: 1.2em;
             text-shadow: 0 2px 12px #222a;
         }
-        .start-btn, .option-btn, .nav-btn {
+        .start-btn, .nav-btn {
             font-family: inherit;
             font-size: 1.15em;
             border: none;
@@ -80,42 +78,94 @@
             margin-bottom: 1.2em;
             text-shadow: 0 2px 8px #222a;
         }
-        .options-row {
+        .options-slider {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            margin: 28px 0 18px 0;
+            margin: 36px 0 18px 0;
+            gap: 0;
         }
-        .option-btn {
-            flex: 1 1 0;
-            margin: 0;
-            padding: 16px 0;
+        .slider-label {
             font-size: 1.08em;
-            border-radius: 14px;
+            margin-top: 8px;
+            font-weight: bold;
+            color: #b44143;
+            width: 48px;
+            text-align: center;
+        }
+        .slider-label.right {
+            color: #62b283;
+        }
+        .slider-radio-group {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin: 0 8px;
+        }
+        .slider-radio-group::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #b44143 0%, #dda95f 25%, #e0e0e0 50%, #4ba694 75%, #62b283 100%);
+            z-index: 0;
+            transform: translateY(-50%);
+            border-radius: 2px;
+        }
+        .slider-radio {
+            position: relative;
+            z-index: 1;
+            background: none;
             border: none;
-            color: #fff;
-            font-weight: 500;
-            box-shadow: 0 2px 8px rgba(10,24,51,0.10);
-            transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
             outline: none;
+            cursor: pointer;
+            padding: 0;
+            margin: 0 0.5vw;
         }
-        .option-btn.selected, .option-btn:active {
-            box-shadow: 0 4px 18px 0 rgba(127,83,172,0.18);
-            transform: scale(1.06);
-            border: 2px solid #fff;
+        .slider-radio-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 3px solid #e0e0e0;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.18s, box-shadow 0.18s;
+            box-shadow: 0 2px 8px rgba(10,24,51,0.10);
         }
-        .option-btn.red    { background:rgb(180, 65, 67); }
-        .option-btn.orange { background:rgb(221, 169, 95); color: #222; }
-        .option-btn.gray   { background: #e0e0e0; color: #222; }
-        .option-btn.blue   { background:rgb(75, 166, 148); }
-        .option-btn.green  { background:rgb(98, 178, 131); }
-        .option-btn:hover:not(:disabled) {
-            filter: brightness(1.08) saturate(1.2);
-            transform: scale(1.08);
+        .slider-radio.selected .slider-radio-circle {
+            border-color: #62b283;
+            box-shadow: 0 0 0 4px rgba(98,178,131,0.18);
         }
-        .option-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .slider-radio.red .slider-radio-circle { border-color: #b44143; }
+        .slider-radio.orange .slider-radio-circle { border-color: #dda95f; }
+        .slider-radio.gray .slider-radio-circle { border-color: #e0e0e0; }
+        .slider-radio.blue .slider-radio-circle { border-color: #4ba694; }
+        .slider-radio.green .slider-radio-circle { border-color: #62b283; }
+        .slider-radio.selected .slider-radio-circle {
+            background: #62b283;
+        }
+        .slider-radio.selected.red .slider-radio-circle { background: #b44143; }
+        .slider-radio.selected.orange .slider-radio-circle { background: #dda95f; }
+        .slider-radio.selected.gray .slider-radio-circle { background: #e0e0e0; }
+        .slider-radio.selected.blue .slider-radio-circle { background: #4ba694; }
+        .slider-radio.selected.green .slider-radio-circle { background: #62b283; }
+        .slider-radio-circle-inner {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            opacity: 0;
+            transition: opacity 0.18s;
+        }
+        .slider-radio.selected .slider-radio-circle-inner {
+            opacity: 1;
+            background: #fff;
         }
         .nav-btn {
             margin: 0 8px;
@@ -160,7 +210,9 @@
             .center-card { padding: 18px 4vw 18px 4vw; }
             .title { font-size: 1.2em; }
             .question-title { font-size: 1em; }
-            .option-btn { font-size: 0.95em; padding: 12px 0; }
+            .slider-radio-circle { width: 28px; height: 28px; }
+            .slider-radio-circle-inner { width: 12px; height: 12px; }
+            .slider-label { font-size: 0.95em; width: 36px; }
         }
     </style>
 </head>
@@ -217,18 +269,29 @@
         // 题目页
         function showQuestion(errorMsg = '') {
             let progress = Math.round((current + 1) / questions.length * 100);
-            let optionsHtml = options.map((opt, idx) => `
+            let leftLabel = `<div class="slider-label">非常不同意</div>`;
+            let rightLabel = `<div class="slider-label right">非常同意</div>`;
+            let sliderHtml = options.map((opt, idx) => `
                 <button
-                    class="option-btn ${opt.color} ${answers[current] === opt.value ? 'selected' : ''}"
+                    class="slider-radio ${opt.color} ${answers[current] === opt.value ? 'selected' : ''}"
                     onclick="selectOption(${opt.value})"
                     type="button"
-                >${opt.text}</button>
+                    aria-label="${opt.text}"
+                >
+                    <div class="slider-radio-circle">
+                        <div class="slider-radio-circle-inner"></div>
+                    </div>
+                </button>
             `).join('');
             document.getElementById('quiz-app').innerHTML = `
                 <div class="center-card">
                     <div class="progress-bar"><div class="progress" style="width:${progress}%;"></div></div>
                     <div class="question-title">${questions[current]}</div>
-                    <div class="options-row">${optionsHtml}</div>
+                    <div class="options-slider">
+                        ${leftLabel}
+                        <div class="slider-radio-group">${sliderHtml}</div>
+                        ${rightLabel}
+                    </div>
                     <div class="btn-group" style="margin-top:24px;">
                         <button class="nav-btn" onclick="prevQuestion()" ${current === 0 ? 'disabled' : ''}>上一题</button>
                         <button class="nav-btn" onclick="nextQuestion()">${current === questions.length - 1 ? '提交' : '下一题'}</button>
