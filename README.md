@@ -17,7 +17,7 @@
             overflow-x: hidden;
             background: #0a1833;
             /* 用真实动图替换下方URL即可 */
-            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80');
+            background-image: url('[https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80](https://cdn.pixabay.com/photo/2023/10/10/11/28/star-trails-8306233_1280.jpg)');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
