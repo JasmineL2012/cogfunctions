@@ -401,16 +401,6 @@
                     </div>
                 `;
             }).join('');
-            // 匹配人格类型
-            let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
-            let typeScores = [];
-            for (let type in typeTable) {
-                let typeFuncs = typeTable[type].slice(0, 4);
-                let score = mainSeq.reduce((acc, f, i) => acc + (f === typeFuncs[i] ? 1 : 0), 0);
-                typeScores.push({type, score});
-            }
-            typeScores.sort((a, b) => b.score - a.score);
-            let top3 = typeScores.slice(0, 3);
             let typeHtml = `<p style="color:#ffe7ba;">最有可能的人格类型：</p><ul>${top3.map(t=>`<li><b>${t.type}</b> 匹配分：${t.score}/4</li>`).join('')}</ul>`;
             document.getElementById('quiz-app').innerHTML = `
                 <div class="center-card">
