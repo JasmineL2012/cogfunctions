@@ -125,6 +125,9 @@
             .slider-label { font-size: 0.95em; width: 36px; }
             .bar-bg { width: 120px; }
         }
+        @media (max-width: 900px) {
+    .center-card { flex-direction: column !important; max-width: 98vw !important; }
+}
     </style>
 </head>
 <body>
@@ -422,16 +425,24 @@
             }
             let typeHtml = `<p style="color:#ffe7ba;">最有可能的人格类型：</p><ul>${top3.map(t=>`<li><b>${t.type}</b> 匹配分：${t.score}/4</li>`).join('')}</ul>`;
             document.getElementById('quiz-app').innerHTML = `
-                <div class="center-card">
-                    <div class="result-title">测试完成！</div>
-                    ${typeHtml}
-                    <p>你的主序列：</p>
-                    <ul>${resultHtml}</ul>
-                    <p style="margin-bottom:1em;">各变量得分：</p>
-                    <div>${scoreHtml}</div>
-                    <button class="start-btn" onclick="renderHome()">返回首页</button>
-                </div>
-            `;
+    <div class="center-card" style="max-width:1100px;display:flex;flex-direction:row;justify-content:space-between;gap:32px;">
+        <div style="flex:1;min-width:220px;">
+            <div class="result-title">人格类型</div>
+            ${typeHtml}
+        </div>
+        <div style="flex:1.1;min-width:220px;">
+            <div class="result-title">主序列</div>
+            <ul>${resultHtml}</ul>
+        </div>
+        <div style="flex:1.5;min-width:260px;">
+            <div class="result-title">各变量得分</div>
+            <div>${scoreHtml}</div>
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+        <button class="start-btn" onclick="renderHome()">返回首页</button>
+    </div>
+`;
         }
         renderHome();
     </script>
