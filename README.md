@@ -33,6 +33,55 @@
         .slider-label { font-size: 1.08em; margin-top: 8px; font-weight: bold; color: #b44143;
             width: 48px; text-align: center; }
         .slider-label.right { color: #62b283; }
+        .slider-radio-group { display: flex; flex: 1; justify-content: space-between; align-items: center;
+            position: relative; margin: 0 8px; }
+        .slider-radio-group::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #b44143 0%, #dda95f 25%, #e0e0e0 50%, #4ba694 75%, #62b283 100%);
+            z-index: 0; transform: translateY(-50%); border-radius: 2px; }
+        .slider-radio {
+            position: relative; z-index: 1; border: none; outline: none; cursor: pointer;
+            padding: 0; margin: 0 0.5vw; background: none;
+        }
+        .slider-radio-inner {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(20,32,60,0.18);
+            border-radius: 14px;
+            min-width: 64px;
+            padding: 8px 0 4px 0;
+            transition: background 0.18s;
+        }
+        .slider-radio.selected .slider-radio-inner {
+            background: rgba(98,178,131,0.18);
+        }
+        .slider-radio-circle {
+            width: 32px; height: 32px; border-radius: 50%; border: 2.5px solid #e0e0e0; background: #f8f8ff;
+            display: flex; align-items: center; justify-content: center; transition: border-color 0.18s, box-shadow 0.18s;
+            box-shadow: 0 2px 8px rgba(10,24,51,0.10);
+        }
+        .slider-radio.selected .slider-radio-circle { border-color: #62b283; box-shadow: 0 0 0 4px rgba(98,178,131,0.18); }
+        .slider-radio.red .slider-radio-circle { border-color: #b44143; }
+        .slider-radio.orange .slider-radio-circle { border-color: #dda95f; }
+        .slider-radio.gray .slider-radio-circle { border-color: #e0e0e0; }
+        .slider-radio.blue .slider-radio-circle { border-color: #4ba694; }
+        .slider-radio.green .slider-radio-circle { border-color: #62b283; }
+        .slider-radio.selected .slider-radio-circle { background: #62b283; }
+        .slider-radio-circle-inner { width: 14px; height: 14px; border-radius: 50%; background: #fff; opacity: 0;
+            transition: opacity 0.18s; }
+        .slider-radio.selected .slider-radio-circle-inner { opacity: 1; background: #fff; }
+        .slider-radio-text {
+            margin-top: 6px;
+            font-size: 1.08em;
+            color: #f8f8ff;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 6px #222a;
+            font-weight: 500;
+            transition: color 0.18s;
+        }
+        .slider-radio.selected .slider-radio-text {
+            color: #ffe7ba;
+            font-weight: bold;
+            text-shadow: 0 2px 10px #222a;
+        }
         .nav-btn { margin: 0 8px; padding: 10px 28px; background: linear-gradient(90deg, #fff 0%, #e0e0e0 100%);
             color: #0a1833; }
         .nav-btn:disabled { background: #bdbdbd; color: #fff; cursor: not-allowed; }
@@ -71,58 +120,10 @@
             .center-card { padding: 18px 4vw 18px 4vw; }
             .title { font-size: 1.2em; }
             .question-title { font-size: 1em; }
+            .slider-radio-circle { width: 24px; height: 24px; }
+            .slider-radio-circle-inner { width: 10px; height: 10px; }
             .slider-label { font-size: 0.95em; width: 36px; }
             .bar-bg { width: 120px; }
-        }
-        /* 新选项卡片样式 */
-        .option-card-group {
-            display: flex; flex: 1; justify-content: space-between; align-items: stretch; gap: 12px;
-            margin: 0 8px;
-        }
-        .option-card {
-            flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, rgba(20,32,60,0.22) 60%, rgba(98,178,131,0.10) 100%);
-            border-radius: 18px;
-            min-width: 0;
-            min-height: 72px;
-            padding: 12px 6px 10px 6px;
-            margin: 0;
-            border: 2.5px solid transparent;
-            box-shadow: 0 2px 12px 0 rgba(31,38,135,0.10);
-            cursor: pointer;
-            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s, transform 0.12s;
-            font-size: 1.14em;
-            color: #f8f8ff;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-shadow: 0 1px 6px #222a;
-            outline: none;
-            position: relative;
-        }
-        .option-card.selected {
-            border-color: #62b283;
-            background: linear-gradient(135deg, rgba(98,178,131,0.22) 60%, rgba(255,231,186,0.18) 100%);
-            color: #ffe7ba;
-            font-weight: bold;
-            box-shadow: 0 4px 18px 0 rgba(98,178,131,0.18);
-            transform: scale(1.04);
-        }
-        .option-card:active {
-            transform: scale(0.98);
-        }
-        .option-card .option-dot {
-            width: 18px; height: 18px; border-radius: 50%; margin-bottom: 8px;
-            border: 2.5px solid #e0e0e0; background: #fff; box-shadow: 0 1px 6px #222a22;
-            transition: border-color 0.18s, background 0.18s;
-        }
-        .option-card.selected .option-dot {
-            background: #62b283;
-            border-color: #62b283;
-        }
-        @media (max-width: 600px) {
-            .option-card-group { gap: 4px; }
-            .option-card { min-height: 48px; font-size: 0.98em; padding: 8px 2px 8px 2px; }
-            .option-card .option-dot { width: 12px; height: 12px; }
         }
     </style>
 </head>
@@ -221,15 +222,19 @@
             let progress = Math.round((current + 1) / questions.length * 100);
             let leftLabel = `<div class="slider-label">完全不符合</div>`;
             let rightLabel = `<div class="slider-label right">非常同意</div>`;
-            let optionHtml = options.map((opt, idx) => `
+            let sliderHtml = options.map((opt, idx) => `
                 <button
-                    class="option-card${answers[current] === opt.value ? ' selected' : ''}"
+                    class="slider-radio ${opt.color} ${answers[current] === opt.value ? 'selected' : ''}"
                     onclick="selectOption(${opt.value})"
                     type="button"
                     aria-label="${opt.text}"
                 >
-                    <div class="option-dot"></div>
-                    <span>${opt.text}</span>
+                    <div class="slider-radio-inner">
+                        <div class="slider-radio-circle">
+                            <div class="slider-radio-circle-inner"></div>
+                        </div>
+                        <span class="slider-radio-text">${opt.text}</span>
+                    </div>
                 </button>
             `).join('');
             document.getElementById('quiz-app').innerHTML = `
@@ -238,7 +243,7 @@
                     <div class="question-title">${questions[current].text}</div>
                     <div class="options-slider">
                         ${leftLabel}
-                        <div class="option-card-group">${optionHtml}</div>
+                        <div class="slider-radio-group">${sliderHtml}</div>
                         ${rightLabel}
                     </div>
                     <div class="btn-group" style="margin-top:24px;">
@@ -373,7 +378,7 @@
             positions[4] = getComplement(main1);
             positions[7] = getComplement(main2);
 
-            // 匹配人格类型
+            // 类型匹配和补全功能顺序
             let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
             let typeScores = [];
             for (let type in typeTable) {
@@ -383,10 +388,9 @@
             }
             typeScores.sort((a, b) => b.score - a.score);
             let bestType = typeScores[0]?.type;
-            if (!bestType) bestType = "（无法判断）";
             let top3 = typeScores.slice(0, 3);
 
-            // === 自动补全第5~8位功能 ===
+            // 用 bestType 补全 positions[4-7]
             if (bestType) {
                 let bestFuncs = typeTable[bestType];
                 positions[4] = bestFuncs[4] || positions[4];
@@ -396,15 +400,16 @@
             }
 
             let resultHtml = `
-                <li>主导功能(1)：${positions[0]}</li>
+                <li>主功能(1)：${positions[0]}</li>
                 <li>辅助功能(2)：${positions[1]}</li>
-                <li>第三功能(3)：${positions[2]}</li>
-                <li>劣势功能(4)：${positions[3]}</li>
-                <li>互补功能(5)：${positions[4]}</li>
+                <li>副组对位(3)：${positions[2]}</li>
+                <li>主组对位(4)：${positions[3]}</li>
+                <li>主组互补(5)：${positions[4]}</li>
                 <li>批判功能(6)：${positions[5]}</li>
                 <li>盲点功能(7)：${positions[6]}</li>
-                <li>魔鬼功能(8)：${positions[7]}</li>
+                <li>副组互补(8)：${positions[7]}</li>
             `;
+            // 柱状图
             let maxScore = Math.max(...Object.values(funcScores));
             let scoreHtml = Object.entries(funcScores).map(([k, v]) => {
                 let barWidth = maxScore > 0 ? Math.round((v / maxScore) * 240) : 0;
@@ -418,12 +423,7 @@
                     </div>
                 `;
             }).join('');
-            let typeHtml = `
-                <p style="color:#ffe7ba;font-size:1.2em;">
-                    你的类型：<b style="font-size:1.5em;color:#62b283;">${bestType || ''}</b>
-                </p>
-                <ul>${top3.map(t=>`<li><b>${t.type}</b> 匹配分：${t.score}/4</li>`).join('')}</ul>
-            `;
+            let typeHtml = `<p style="color:#ffe7ba;">最有可能的人格类型：</p><ul>${top3.map(t=>`<li><b>${t.type}</b> 匹配分：${t.score}/4</li>`).join('')}</ul>`;
             document.getElementById('quiz-app').innerHTML = `
                 <div class="center-card">
                     <div class="result-title">测试完成！</div>
