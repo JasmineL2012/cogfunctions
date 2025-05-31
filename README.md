@@ -245,11 +245,43 @@
             ISTP: ["Ti","Se","Ni","Fe","Te","Si","Ne","Fi"],
             ISFP: ["Fi","Se","Ni","Te","Fe","Si","Ne","Ti"]
         };
-        // ===================== 你可以自定义的部分结束 =====================
         let userScores = {};
         functions.forEach(f => userScores[f] = [0,0,0,0,0,0,0,0]);
         let answers = new Array(questions.length).fill(null);
         let current = 0;
+
+        function showStartDialog() {
+            if (document.getElementById('start-dialog')) return;
+            const dialog = document.createElement('div');
+            dialog.id = 'start-dialog';
+            dialog.style.position = 'fixed';
+            dialog.style.left = '0'; dialog.style.top = '0'; dialog.style.width = '100vw'; dialog.style.height = '100vh';
+            dialog.style.background = 'rgba(10,24,51,0.55)';
+            dialog.style.zIndex = '9999';
+            dialog.innerHTML = `
+                <div style="
+                    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+                    background:rgba(255,255,255,0.13);backdrop-filter:blur(8px);
+                    border-radius:18px;box-shadow:0 8px 32px 0 rgba(31,38,135,0.37);
+                    padding:38px 32px 32px 32px;max-width:420px;width:90vw;text-align:left;
+                ">
+                    <div style="color:#ffe7ba;font-size:1.18em;font-weight:bold;margin-bottom:1em;">测试须知</div>
+                    <div style="color:#fff;line-height:1.8;font-size:1.08em;">
+                        1. 部分测试题为深刻了解荣格八维的用户服务，旨在防止用户猜测题目意图。<br>
+                        2. 为保证测试准确性，请以你大多数情况下的做法为准答题，而不是“应该这么做”或“我也可以这么做”。
+                    </div>
+                    <div style="text-align:center;margin-top:2em;">
+                        <button class="start-btn" onclick="closeStartDialogAndBegin()">确认</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(dialog);
+        }
+        function closeStartDialogAndBegin() {
+            const dialog = document.getElementById('start-dialog');
+            if (dialog) dialog.remove();
+            actuallyStartTest();
+        }
         function renderHome() {
             document.getElementById('quiz-app').innerHTML = `
                 <div class="center-card">
@@ -261,7 +293,6 @@
         }
         function showQuestion(errorMsg = '') {
             let progress = Math.round((current + 1) / questions.length * 100);
-            // 只在最左和最右显示标签
             let leftLabel = `<div class="slider-label">否</div>`;
             let rightLabel = `<div class="slider-label right">是</div>`;
             let sliderHtml = options.map((opt, idx) => `
@@ -323,6 +354,9 @@
             }
         }
         function startTest() {
+            showStartDialog();
+        }
+        function actuallyStartTest() {
             current = 0;
             answers = new Array(questions.length).fill(null);
             functions.forEach(f => userScores[f] = [0,0,0,0,0,0,0,0]);
@@ -418,6 +452,26 @@
             }
             positions[4] = getComplement(main1);
             positions[7] = getComplement(main2);
+
+            // 匹配人格类型，补全5-8功能
+            let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
+            let typeScores = [];
+            for (let type in typeTable) {
+                let typeFuncs = typeTable[type].slice(0, 4);
+                let score = mainSeq.reduce((acc, f, i) => acc + (f === typeFuncs[i] ? 1 : 0), 0);
+                typeScores.push({type, score});
+            }
+            typeScores.sort((a, b) => b.score - a.score);
+            let top3 = typeScores.slice(0, 3);
+            let bestType = top3[0]?.type;
+            if (bestType) {
+                let bestFuncs = typeTable[bestType];
+                positions[4] = bestFuncs[4] || positions[4];
+                positions[5] = bestFuncs[5] || "";
+                positions[6] = bestFuncs[6] || "";
+                positions[7] = bestFuncs[7] || positions[7];
+            }
+
             let resultHtml = `
                 <li>主导功能(1)：${positions[0]}</li>
                 <li>辅助功能(2)：${positions[1]}</li>
@@ -441,24 +495,6 @@
                     </div>
                 `;
             }).join('');
-            // 匹配人格类型
-            let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
-            let typeScores = [];
-            for (let type in typeTable) {
-                let typeFuncs = typeTable[type].slice(0, 4);
-                let score = mainSeq.reduce((acc, f, i) => acc + (f === typeFuncs[i] ? 1 : 0), 0);
-                typeScores.push({type, score});
-            }
-            typeScores.sort((a, b) => b.score - a.score);
-            let top3 = typeScores.slice(0, 3);
-            let bestType = top3[0]?.type;
-            if (bestType) {
-                let bestFuncs = typeTable[bestType];
-                positions[4] = bestFuncs[4] || positions[4];
-                positions[5] = bestFuncs[5] || "";
-                positions[6] = bestFuncs[6] || "";
-                positions[7] = bestFuncs[7] || positions[7];
-            }
             let typeHtml = `<p style="color:#ffe7ba;">最有可能的人格类型：</p><ul>${top3.map(t=>`<li><b>${t.type}</b> 匹配分：${t.score}/4</li>`).join('')}</ul>`;
             document.getElementById('quiz-app').innerHTML = `
     <div class="center-card" style="max-width:1100px;display:flex;flex-direction:row;justify-content:space-between;gap:32px;">
