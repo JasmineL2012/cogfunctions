@@ -88,7 +88,7 @@
         // 1. 题目设置（func: 功能，polarity: "positive"/"negative"，weight: 分数倍数）
         // polarity: "positive" 表示加到主功能（1号位），"negative" 表示加到劣势功能（8号位）
         // weight: 分数倍数（如1, 1.5, 2等）
-        
+
             const questions = [
     { text: "你相信有一个标准能区分大部分行为、事情，而那些符合标准的是好的", func: "Te", polarity: "positive", weight: 2 },
     { text: "你不喜欢考虑那么多特殊情况。比如你不在乎一个人偷东西是否迫不得已，他事实上就是做错了", func: "Te", polarity: "positive", weight: 2 },
@@ -267,7 +267,7 @@
         // 统计分数和匹配
         function submitQuiz() {
     // 1. 统计每个功能正负得分
-    let funcVars = ["Ni","Ne","Si","Se","Ti","Te","Fi","Fe"];
+    const funcVars = ["Ni","Ne","Si","Se","Ti","Te","Fi","Fe"];
     let funcScores = {};
     funcVars.forEach(f => {
         funcScores[f + "+"] = 0;
@@ -282,84 +282,134 @@
         }
     });
 
-    // 2. 感知功能+、判断功能+，分别选最高的
+    // 2. 感知功能+、判断功能+，分别选最高的2个，且必须一内一外
+    // 定义内外倾
+    const attitude = {
+        "Ni+": "i", "Ni-": "i", "Ne+": "e", "Ne-": "e",
+        "Si+": "i", "Si-": "i", "Se+": "e", "Se-": "e",
+        "Ti+": "i", "Ti-": "i", "Te+": "e", "Te-": "e",
+        "Fi+": "i", "Fi-": "i", "Fe+": "e", "Fe-": "e"
+    };
+
+    // 感知功能+（只看+）
     let perceptionPlus = [
         { key: "Ni+", val: funcScores["Ni+"] },
         { key: "Ne+", val: funcScores["Ne+"] },
         { key: "Si+", val: funcScores["Si+"] },
         { key: "Se+", val: funcScores["Se+"] }
-    ];
+    ].sort((a,b)=>b.val-a.val);
+
+    // 判断功能+（只看+）
     let judgingPlus = [
         { key: "Ti+", val: funcScores["Ti+"] },
         { key: "Te+", val: funcScores["Te+"] },
         { key: "Fi+", val: funcScores["Fi+"] },
         { key: "Fe+", val: funcScores["Fe+"] }
-    ];
-    perceptionPlus.sort((a,b)=>b.val-a.val);
-    judgingPlus.sort((a,b)=>b.val-a.val);
+    ].sort((a,b)=>b.val-a.val);
 
-    // 3. 取感知+和判断+最高的各1个，作为候选
-    let topPer = perceptionPlus[0];
-    let topJud = judgingPlus[0];
+    // 3. 选出感知、判断各1个，且必须一内一外
+    let mainPer = null, mainJud = null;
+    for (let p of perceptionPlus) {
+        for (let j of judgingPlus) {
+            if (attitude[p.key] !== attitude[j.key]) {
+                mainPer = p;
+                mainJud = j;
+                break;
+            }
+        }
+        if (mainPer && mainJud) break;
+    }
+    if (!mainPer || !mainJud) {
+        alert("无法确定主功能和辅助功能的内外倾，请检查题目设置或答题分布。");
+        return;
+    }
 
-    // 4. 分组（每组一正一负）
-    const groupMap = {
-        "Ni": ["Ni","Se"], "Se": ["Ni","Se"],
-        "Ne": ["Ne","Si"], "Si": ["Ne","Si"],
-        "Ti": ["Ti","Fe"], "Fe": ["Ti","Fe"],
-        "Fi": ["Fi","Te"], "Te": ["Fi","Te"]
+    // 4. 分组（正负配对）
+    // 组定义：主功能和其对组
+    const groupPairs = {
+        "Ni+": ["Ni+","Se-"], "Se+": ["Se+","Ni-"],
+        "Ne+": ["Ne+","Si-"], "Si+": ["Si+","Ne-"],
+        "Ti+": ["Ti+","Fe-"], "Fe+": ["Fe+","Ti-"],
+        "Fi+": ["Fi+","Te-"], "Te+": ["Te+","Fi-"]
     };
 
-    // 5. 计算两组总分（正负都算进去）
-    function groupSum(group) {
-        return funcScores[group[0]+"+"] + funcScores[group[0]+"-"] +
-               funcScores[group[1]+"+"] + funcScores[group[1]+"-"];
+    // 5. 计算两组总分
+    function groupSum(pair) {
+        return (funcScores[pair[0]] || 0) + (funcScores[pair[1]] || 0);
     }
-    let group1 = groupMap[topPer.key.slice(0,2)];
-    let group2 = groupMap[topJud.key.slice(0,2)];
-    let group1Sum = groupSum(group1);
-    let group2Sum = groupSum(group2);
+    let perPair = groupPairs[mainPer.key];
+    let judPair = groupPairs[mainJud.key];
+    let perSum = groupSum(perPair);
+    let judSum = groupSum(judPair);
 
-    // 6. 决定主功能1、2位置（高的在1，低的在2）
-    let main1, main2, main1Group, main2Group;
-    if (group1Sum >= group2Sum) {
-        main1 = topPer.key.slice(0,2);
-        main2 = topJud.key.slice(0,2);
-        main1Group = group1;
-        main2Group = group2;
+    // 6. 决定主功能1、2位置（高的在1，低的在2），并确定组内排序
+    let main1, main2, main1Pair, main2Pair;
+    if (perSum >= judSum) {
+        main1 = mainPer.key;
+        main2 = mainJud.key;
+        main1Pair = perPair;
+        main2Pair = judPair;
     } else {
-        main1 = topJud.key.slice(0,2);
-        main2 = topPer.key.slice(0,2);
-        main1Group = group2;
-        main2Group = group1;
+        main1 = mainJud.key;
+        main2 = mainPer.key;
+        main1Pair = judPair;
+        main2Pair = perPair;
     }
 
-    // 7. 一组里的功能要不放1/4，要不放2/3，要不放5/8，要不放6/7
+    // 7. 一组里的功能必须在1、4位或2、3，或5、8，或6、7
     // 这里只放主功能和对位功能，其他可扩展
-    // 1和5对位，2和6对位
+    // 1和4对位，2和3对位
     let positions = Array(8).fill("");
-    positions[0] = main1;
-    positions[1] = main2;
-    // 5位是主功能组的另一个
-    positions[4] = main1Group[0] === main1 ? main1Group[1] : main1Group[0];
-    // 6位是副功能组的另一个
-    positions[5] = main2Group[0] === main2 ? main2Group[1] : main2Group[0];
+    positions[0] = main1; // 主功能
+    positions[1] = main2; // 辅助功能
+    // 4位是主功能组的另一个
+    positions[3] = main1Pair[0] === main1 ? main1Pair[1] : main1Pair[0];
+    // 3位是副功能组的另一个
+    positions[2] = main2Pair[0] === main2 ? main2Pair[1] : main2Pair[0];
 
-    // 8. 互补主功能（如1是Ni，5是Ne；1是Te，5是Ti；反之亦然）
-    // 已在上面实现
+    // 8. 互补主功能（如1是Ni+，5就是Ne+；1是Te+，5就是Ti+；反之亦然）
+    // 5和8位互补
+    function getComplement(key) {
+        if (key.startsWith("Ni")) return "Ne+";
+        if (key.startsWith("Ne")) return "Ni+";
+        if (key.startsWith("Si")) return "Se+";
+        if (key.startsWith("Se")) return "Si+";
+        if (key.startsWith("Ti")) return "Te+";
+        if (key.startsWith("Te")) return "Ti+";
+        if (key.startsWith("Fi")) return "Fe+";
+        if (key.startsWith("Fe")) return "Fi+";
+        return "";
+    }
+    positions[4] = getComplement(main1);
+    positions[7] = getComplement(main2);
 
     // 9. 展示
     let resultHtml = `
         <li>主功能(1)：${positions[0]}</li>
         <li>辅助功能(2)：${positions[1]}</li>
-        <li>第五功能(5)：${positions[4]}</li>
-        <li>第六功能(6)：${positions[5]}</li>
+        <li>副组对位(3)：${positions[2]}</li>
+        <li>主组对位(4)：${positions[3]}</li>
+        <li>主组互补(5)：${positions[4]}</li>
+        <li>副组互补(8)：${positions[7]}</li>
     `;
 
-    // 展示所有变量得分
-    let scoreHtml = Object.entries(funcScores).map(
-        ([k,v]) => `<li>${k}: ${v}</li>`
-    ).join('');
+    // ...前面代码不变...
+
+// 展示所有变量得分（柱状图）
+let maxScore = Math.max(...Object.values(funcScores));
+let scoreHtml = Object.entries(funcScores).map(([k, v]) => {
+    // 归一化宽度，最宽240px
+    let barWidth = maxScore > 0 ? Math.round((v / maxScore) * 240) : 0;
+    return `
+        <div style="display:flex;align-items:center;margin-bottom:6px;">
+            <span style="display:inline-block;width:48px;">${k}</span>
+            <div style="background:#62b283;height:18px;border-radius:6px;min-width:2px;width:${barWidth}px;transition:width 0.3s;"></div>
+            <span style="margin-left:8px;color:#ffe7ba;">${v}</span>
+        </div>
+    `;
+}).join('');
+
+// ...后面代码不变...
 
     document.getElementById('quiz-app').innerHTML = `
         <div class="center-card">
@@ -378,4 +428,3 @@
     </script>
 </body>
 </html>
-
