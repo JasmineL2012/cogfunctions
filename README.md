@@ -373,40 +373,76 @@
             showQuestion();
         }
 
-        // 结果页
         function submitQuiz() {
-            // 统计分数
-            functions.forEach(f => userScores[f] = [0,0,0,0,0,0,0,0]);
-            answers.forEach((score, idx) => {
-                if (score !== null) {
-                    const q = questions[idx];
-                    q.positions.forEach(pos => {
-                        userScores[q.func][pos-1] += score;
-                    });
-                }
+    // 统计分数
+    functions.forEach(f => userScores[f] = [0,0,0,0,0,0,0,0]);
+    answers.forEach((score, idx) => {
+        if (score !== null) {
+            const q = questions[idx];
+            q.positions.forEach(pos => {
+                userScores[q.func][pos-1] += score;
             });
-
-            // 展示每个功能每个位置得分
-            let scoreHtml = functions.map(f =>
-                `<li><b>${f}</b>：${userScores[f].map((v,i)=>`[${i+1}]${v}`).join(' ')}</li>`
-            ).join('');
-
-            document.getElementById('quiz-app').innerHTML = `
-                <div class="center-card">
-                    <div class="result-title">测试完成！</div>
-                    <p style="margin-bottom:1em;">各功能各位置得分：</p>
-                    <ul>
-                        ${scoreHtml}
-                    </ul>
-                    <button class="start-btn" onclick="renderHome()">返回首页</button>
-                </div>
-            `;
         }
+    });
+
+    // 人格类型功能分布表
+    const typeTable = {
+        INTJ: ["Ni","Te","Fi","Se","Ne","Ti","Fe","Si"],
+        INTP: ["Ti","Ne","Si","Fe","Te","Ni","Se","Fi"],
+        ENTJ: ["Te","Ni","Se","Fi","Fe","Ne","Si","Ti"],
+        ENTP: ["Ne","Ti","Fe","Si","Ni","Te","Fi","Se"],
+        INFJ: ["Ni","Fe","Ti","Se","Ne","Fi","Te","Si"],
+        INFP: ["Fi","Ne","Si","Te","Fe","Ni","Se","Ti"],
+        ENFP: ["Ne","Fi","Te","Si","Ni","Fe","Ti","Se"],
+        ENFJ: ["Fe","Ni","Se","Ti","Fi","Ne","Si","Te"],
+        ISTJ: ["Si","Te","Fi","Ne","Se","Ti","Fe","Ni"],
+        ISFJ: ["Si","Fe","Ti","Ne","Se","Fi","Te","Ni"],
+        ESTJ: ["Te","Si","Ne","Fi","Fe","Se","Ni","Ti"],
+        ESFJ: ["Fe","Si","Ne","Ti","Fi","Se","Ni","Te"],
+        ESTP: ["Se","Ti","Fe","Ni","Si","Te","Fi","Ne"],
+        ESFP: ["Se","Fi","Te","Ni","Si","Fe","Ti","Ne"],
+        ISTP: ["Ti","Se","Ni","Fe","Te","Si","Ne","Fi"],
+        ISFP: ["Fi","Se","Ni","Te","Fe","Si","Ne","Ti"]
+    };
+
+    // 匹配算法
+    let results = [];
+    for (let type in typeTable) {
+        let score = 0;
+        let funcs = typeTable[type];
+        for (let i = 0; i < 8; i++) {
+            score += userScores[funcs[i]][i];
+        }
+        results.push({ type, score });
+    }
+    results.sort((a, b) => b.score - a.score);
+    let top3 = results.slice(0, 3);
+
+    // 展示每个功能每个位置得分
+    let scoreHtml = functions.map(f =>
+        `<li><b>${f}</b>：${userScores[f].map((v,i)=>`[${i+1}]${v}`).join(' ')}</li>`
+    ).join('');
+
+    // 展示匹配人格
+    let matchHtml = top3.map((m, idx) =>
+        `<li><b>${idx+1}. ${m.type}</b> 匹配分：${m.score}</li>`
+    ).join('');
+
+    document.getElementById('quiz-app').innerHTML = `
+        <div class="center-card">
+            <div class="result-title">测试完成！</div>
+            <p>你最有可能的人格类型：</p>
+            <ul>${matchHtml}</ul>
+            <p style="margin-bottom:1em;">各功能各位置得分：</p>
+            <ul>${scoreHtml}</ul>
+            <button class="start-btn" onclick="renderHome()">返回首页</button>
+        </div>
+    `;
+}
 
         // 初始化
         renderHome();
     </script>
 </body>
-</htlm>
 </html>
 
