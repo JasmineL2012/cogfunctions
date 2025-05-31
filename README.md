@@ -88,7 +88,7 @@
         // 1. 题目设置（func: 功能，polarity: "positive"/"negative"，weight: 分数倍数）
         // polarity: "positive" 表示加到主功能（1号位），"negative" 表示加到劣势功能（8号位）
         // weight: 分数倍数（如1, 1.5, 2等）
-        const questions = [
+        
             const questions = [
     { text: "你相信有一个标准能区分大部分行为、事情，而那些符合标准的是好的", func: "Te", polarity: "positive", weight: 2 },
     { text: "你不喜欢考虑那么多特殊情况。比如你不在乎一个人偷东西是否迫不得已，他事实上就是做错了", func: "Te", polarity: "positive", weight: 2 },
