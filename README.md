@@ -5,12 +5,15 @@
     <title>荣格八维认知功能测试</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        html, body { height: 100%; margin: 0; padding: 0; font-family: 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Arial', sans-serif; }
         body {
             min-height: 100vh; min-width: 100vw; overflow-x: hidden;
             background: #0a1833;
             background-image: url('https://cdn.pixabay.com/photo/2023/10/10/11/28/star-trails-8306233_1280.jpg');
             background-size: cover; background-position: center; background-repeat: no-repeat;
+            animation: bgmove 30s linear infinite alternate;
         }
+        @keyframes bgmove { 0% { background-position: 50% 60%; } 100% { background-position: 50% 40%; } }
         .overlay { position: fixed; inset: 0; background: rgba(10,24,51,0.55); z-index: 0; }
         .center-card { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
             background: rgba(255,255,255,0.13); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
@@ -30,6 +33,9 @@
         .slider-label { font-size: 1.08em; margin-top: 8px; font-weight: bold; color: #b44143;
             width: 48px; text-align: center; }
         .slider-label.right { color: #62b283; }
+        .nav-btn { margin: 0 8px; padding: 10px 28px; background: linear-gradient(90deg, #fff 0%, #e0e0e0 100%);
+            color: #0a1833; }
+        .nav-btn:disabled { background: #bdbdbd; color: #fff; cursor: not-allowed; }
         .progress-bar { width: 100%; background: rgba(255,255,255,0.18); border-radius: 6px; height: 10px;
             margin-bottom: 18px; overflow: hidden; }
         .progress { height: 100%; background: linear-gradient(90deg, #ffe7ba 0%, #7f53ac 100%);
@@ -60,6 +66,13 @@
         }
         .bar-value {
             margin-left: 8px; color: #ffe7ba; font-size: 1.08em;
+        }
+        @media (max-width: 600px) {
+            .center-card { padding: 18px 4vw 18px 4vw; }
+            .title { font-size: 1.2em; }
+            .question-title { font-size: 1em; }
+            .slider-label { font-size: 0.95em; width: 36px; }
+            .bar-bg { width: 120px; }
         }
         /* 新选项卡片样式 */
         .option-card-group {
@@ -107,11 +120,6 @@
             border-color: #62b283;
         }
         @media (max-width: 600px) {
-            .center-card { padding: 18px 4vw 18px 4vw; }
-            .title { font-size: 1.2em; }
-            .question-title { font-size: 1em; }
-            .slider-label { font-size: 0.95em; width: 36px; }
-            .bar-bg { width: 120px; }
             .option-card-group { gap: 4px; }
             .option-card { min-height: 48px; font-size: 0.98em; padding: 8px 2px 8px 2px; }
             .option-card .option-dot { width: 12px; height: 12px; }
@@ -364,6 +372,8 @@
                 if (key.startsWith("Fe")) return "Fi+";
                 return "";
             }
+            positions[4] = getComplement(main1);
+            positions[7] = getComplement(main2);
 
             // 匹配人格类型
             let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
@@ -385,6 +395,7 @@
                 positions[6] = bestFuncs[6] || "";
                 positions[7] = bestFuncs[7] || positions[7];
             }
+
             let resultHtml = `
                 <li>主导功能(1)：${positions[0]}</li>
                 <li>辅助功能(2)：${positions[1]}</li>
@@ -409,8 +420,12 @@
                     </div>
                 `;
             }).join('');
-            
-            let typeHtml = `<p style="color:#ffe7ba;">最有可能的人格类型：</p><ul>${top3.map(t=>`<li><b>${t.type}</b> 匹配分：${t.score}/4</li>`).join('')}</ul>`;
+            let typeHtml = `
+                <p style="color:#ffe7ba;font-size:1.2em;">
+                    你的类型：<b style="font-size:1.5em;color:#62b283;">${bestType || ''}</b>
+                </p>
+                <ul>${top3.map(t=>`<li><b>${t.type}</b> 匹配分：${t.score}/4</li>`).join('')}</ul>
+            `;
             document.getElementById('quiz-app').innerHTML = `
                 <div class="center-card">
                     <div class="result-title">测试完成！</div>
