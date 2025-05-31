@@ -15,23 +15,23 @@
         }
         @keyframes bgmove { 0% { background-position: 50% 60%; } 100% { background-position: 50% 40%; } }
         .overlay { position: fixed; inset: 0; background: rgba(10,24,51,0.55); z-index: 0; }
-       .center-card {
-    position: absolute;
-    left: 50%; top: 50%;
-    transform: translate(-50%,-50%);
-    background: rgba(255,255,255,0.13);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    border-radius: 18px;
-    padding: 38px 32px 32px 32px;
-    max-width: 1100px;   /* 原来是480px，改大 */
-    width: 92vw;         /* 原来是90vw，略加大 */
-    text-align: center;
-    z-index: 1;
-    backdrop-filter: blur(8px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .center-card {
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%,-50%);
+            background: rgba(255,255,255,0.13);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 18px;
+            padding: 38px 32px 32px 32px;
+            max-width: 1100px;
+            width: 92vw;
+            text-align: center;
+            z-index: 1;
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         .title { font-size: 2.1em; font-weight: bold; color: #f8f8ff; letter-spacing: 2px;
             margin-bottom: 1.2em; text-shadow: 0 2px 12px #222a; }
         .start-btn, .nav-btn { font-family: inherit; font-size: 1.15em; border: none; border-radius: 12px;
@@ -43,44 +43,67 @@
         .question-title { font-size: 1.3em; color: #fff; margin-bottom: 1.2em; text-shadow: 0 2px 8px #222a; }
         .options-slider { display: flex; align-items: center; justify-content: space-between;
             margin: 36px 0 18px 0; gap: 0; }
-        .slider-label { font-size: 1.08em; margin-top: 8px; font-weight: bold; color: #b44143;
-            width: 48px; text-align: center; }
+        .slider-label {
+            font-size: 1.08em; margin-top: 8px; font-weight: bold;
+            width: 48px; text-align: center; letter-spacing: 2px;
+            background: rgba(255,255,255,0.10);
+            border-radius: 10px;
+            padding: 4px 0;
+            box-shadow: 0 2px 8px 0 rgba(31,38,135,0.07);
+        }
         .slider-label.right { color: #62b283; }
-        .slider-radio-group { display: flex; flex: 1; justify-content: space-between; align-items: center;
-            position: relative; margin: 0 8px; }
+        .slider-label { color: #b44143; }
+        .slider-radio-group {
+            display: flex; flex: 1; justify-content: space-between; align-items: center;
+            position: relative; margin: 0 8px;
+            gap: 18px;
+        }
         .slider-radio-group::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 4px;
             background: linear-gradient(90deg, #b44143 0%, #dda95f 25%, #e0e0e0 50%, #4ba694 75%, #62b283 100%);
             z-index: 0; transform: translateY(-50%); border-radius: 2px; }
         .slider-radio {
-            position: relative; z-index: 1; border: none; outline: none; cursor: pointer;
-            padding: 0; margin: 0 0.5vw; background: none;
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            transition: transform 0.18s;
         }
-        .slider-radio-inner {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(20,32,60,0.18);
-            border-radius: 14px;
-            min-width: 64px;
-            padding: 8px 0 4px 0;
-            transition: background 0.18s;
+        .slider-radio .slider-radio-inner {
+            background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(98,178,131,0.09) 100%);
+            border-radius: 50%;
+            min-width: 48px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 12px 0 rgba(31,38,135,0.10);
+            transition: background 0.18s, box-shadow 0.18s;
+            border: 2px solid rgba(255,255,255,0.18);
         }
         .slider-radio.selected .slider-radio-inner {
-            background: rgba(98,178,131,0.18);
+            background: linear-gradient(180deg, #62b283 0%, #ffe7ba 100%);
+            box-shadow: 0 0 0 4px rgba(98,178,131,0.18);
+            border: 2.5px solid #ffe7ba;
         }
-        .slider-radio-circle {
-            width: 32px; height: 32px; border-radius: 50%; border: 2.5px solid #e0e0e0; background: #f8f8ff;
-            display: flex; align-items: center; justify-content: center; transition: border-color 0.18s, box-shadow 0.18s;
-            box-shadow: 0 2px 8px rgba(10,24,51,0.10);
+        .slider-radio .slider-radio-circle {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 2.5px solid #e0e0e0; background: #f8f8ff;
+            display: flex; align-items: center; justify-content: center;
+            transition: border-color 0.18s, box-shadow 0.18s;
         }
-        .slider-radio.selected .slider-radio-circle { border-color: #62b283; box-shadow: 0 0 0 4px rgba(98,178,131,0.18); }
-        .slider-radio.red .slider-radio-circle { border-color: #b44143; }
-        .slider-radio.orange .slider-radio-circle { border-color: #dda95f; }
-        .slider-radio.gray .slider-radio-circle { border-color: #e0e0e0; }
-        .slider-radio.blue .slider-radio-circle { border-color: #4ba694; }
-        .slider-radio.green .slider-radio-circle { border-color: #62b283; }
-        .slider-radio.selected .slider-radio-circle { background: #62b283; }
-        .slider-radio-circle-inner { width: 14px; height: 14px; border-radius: 50%; background: #fff; opacity: 0;
-            transition: opacity 0.18s; }
-        .slider-radio.selected .slider-radio-circle-inner { opacity: 1; background: #fff; }
+        .slider-radio.selected .slider-radio-circle {
+            border-color: #62b283;
+            background: #ffe7ba;
+        }
+        .slider-radio .slider-radio-circle-inner {
+            width: 14px; height: 14px; border-radius: 50%; background: #fff; opacity: 0;
+            transition: opacity 0.18s;
+        }
+        .slider-radio.selected .slider-radio-circle-inner {
+            opacity: 1; background: #62b283;
+        }
         .slider-radio-text {
             margin-top: 6px;
             font-size: 1.08em;
@@ -139,8 +162,8 @@
             .bar-bg { width: 120px; }
         }
         @media (max-width: 900px) {
-    .center-card { flex-direction: column !important; max-width: 98vw !important; }
-}
+            .center-card { flex-direction: column !important; max-width: 98vw !important; }
+        }
     </style>
 </head>
 <body>
@@ -238,8 +261,9 @@
         }
         function showQuestion(errorMsg = '') {
             let progress = Math.round((current + 1) / questions.length * 100);
-            let leftLabel = `<div class="slider-label">完全不符合</div>`;
-            let rightLabel = `<div class="slider-label right">非常同意</div>`;
+            // 只在最左和最右显示标签
+            let leftLabel = `<div class="slider-label">否</div>`;
+            let rightLabel = `<div class="slider-label right">是</div>`;
             let sliderHtml = options.map((opt, idx) => `
                 <button
                     class="slider-radio ${opt.color} ${answers[current] === opt.value ? 'selected' : ''}"
@@ -251,7 +275,6 @@
                         <div class="slider-radio-circle">
                             <div class="slider-radio-circle-inner"></div>
                         </div>
-                        <span class="slider-radio-text">${opt.text}</span>
                     </div>
                 </button>
             `).join('');
@@ -461,4 +484,3 @@
     </script>
 </body>
 </html>
-1
