@@ -211,7 +211,6 @@
         functions.forEach(f => userScores[f] = [0,0,0,0,0,0,0,0]);
         let answers = new Array(questions.length).fill(null);
         let current = 0;
-        
         function renderHome() {
             document.getElementById('quiz-app').innerHTML = `
                 <div class="center-card">
@@ -380,39 +379,16 @@
             }
             positions[4] = getComplement(main1);
             positions[7] = getComplement(main2);
-
-            // 类型匹配和补全功能顺序
-            let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
-            let typeScores = [];
-            for (let type in typeTable) {
-                let typeFuncs = typeTable[type].slice(0, 4);
-                let score = mainSeq.reduce((acc, f, i) => acc + (f === typeFuncs[i] ? 1 : 0), 0);
-                typeScores.push({type, score});
-            }
-            typeScores.sort((a, b) => b.score - a.score);
-            let bestType = typeScores[0]?.type;
-            let top3 = typeScores.slice(0, 3);
-
-            // 用 bestType 补全 positions[4-7]
-            if (bestType) {
-                let bestFuncs = typeTable[bestType];
-                positions[4] = bestFuncs[4] || positions[4];
-                positions[5] = bestFuncs[5] || "";
-                positions[6] = bestFuncs[6] || "";
-                positions[7] = bestFuncs[7] || positions[7];
-            }
-
             let resultHtml = `
-                <li>主功能(1)：${positions[0]}</li>
+                <li>主导功能(1)：${positions[0]}</li>
                 <li>辅助功能(2)：${positions[1]}</li>
-                <li>副组对位(3)：${positions[2]}</li>
-                <li>主组对位(4)：${positions[3]}</li>
-                <li>主组互补(5)：${positions[4]}</li>
+                <li>第三功能(3)：${positions[2]}</li>
+                <li>劣势功能(4)：${positions[3]}</li>
+                <li>替补功能(5)：${positions[4]}</li>
                 <li>批判功能(6)：${positions[5]}</li>
                 <li>盲点功能(7)：${positions[6]}</li>
-                <li>副组互补(8)：${positions[7]}</li>
+                <li>魔鬼功能(8)：${positions[7]}</li>
             `;
-            // 柱状图
             let maxScore = Math.max(...Object.values(funcScores));
             let scoreHtml = Object.entries(funcScores).map(([k, v]) => {
                 let barWidth = maxScore > 0 ? Math.round((v / maxScore) * 240) : 0;
@@ -426,6 +402,24 @@
                     </div>
                 `;
             }).join('');
+            // 匹配人格类型
+            let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
+            let typeScores = [];
+            for (let type in typeTable) {
+                let typeFuncs = typeTable[type].slice(0, 4);
+                let score = mainSeq.reduce((acc, f, i) => acc + (f === typeFuncs[i] ? 1 : 0), 0);
+                typeScores.push({type, score});
+            }
+            typeScores.sort((a, b) => b.score - a.score);
+            let top3 = typeScores.slice(0, 3);
+            let bestType = top3[0]?.type;
+            if (bestType) {
+                let bestFuncs = typeTable[bestType];
+                positions[4] = bestFuncs[4] || positions[4];
+                positions[5] = bestFuncs[5] || "";
+                positions[6] = bestFuncs[6] || "";
+                positions[7] = bestFuncs[7] || positions[7];
+            }
             let typeHtml = `<p style="color:#ffe7ba;">最有可能的人格类型：</p><ul>${top3.map(t=>`<li><b>${t.type}</b> 匹配分：${t.score}/4</li>`).join('')}</ul>`;
             document.getElementById('quiz-app').innerHTML = `
                 <div class="center-card">
