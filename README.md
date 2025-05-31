@@ -131,6 +131,7 @@
     <div class="overlay"></div>
     <div id="quiz-app"></div>
     <script>
+        // ===================== 你可以自定义的部分 =====================
         const questions = [
             { text: "你相信有一个标准能区分大部分行为、事情，而那些符合标准的是好的", func: "Te", polarity: "positive", weight: 2 },
             { text: "你不喜欢考虑那么多特殊情况。比如你不在乎一个人偷东西是否迫不得已，他事实上就是做错了", func: "Te", polarity: "positive", weight: 2 },
@@ -205,10 +206,12 @@
             ISTP: ["Ti","Se","Ni","Fe","Te","Si","Ne","Fi"],
             ISFP: ["Fi","Se","Ni","Te","Fe","Si","Ne","Ti"]
         };
+        // ===================== 你可以自定义的部分结束 =====================
         let userScores = {};
         functions.forEach(f => userScores[f] = [0,0,0,0,0,0,0,0]);
         let answers = new Array(questions.length).fill(null);
         let current = 0;
+        
         function renderHome() {
             document.getElementById('quiz-app').innerHTML = `
                 <div class="center-card">
