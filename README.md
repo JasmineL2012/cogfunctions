@@ -1,59 +1,121 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <title>荣格八维认知功能测试</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        body {
+            min-height: 100vh; min-width: 100vw; overflow-x: hidden;
+            background: #0a1833;
+            background-image: url('https://cdn.pixabay.com/photo/2023/10/10/11/28/star-trails-8306233_1280.jpg');
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+        }
+        .overlay { position: fixed; inset: 0; background: rgba(10,24,51,0.55); z-index: 0; }
+        .center-card { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+            background: rgba(255,255,255,0.13); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 18px; padding: 38px 32px 32px 32px; max-width: 480px; width: 90vw;
+            text-align: center; z-index: 1; backdrop-filter: blur(8px); }
+        .title { font-size: 2.1em; font-weight: bold; color: #f8f8ff; letter-spacing: 2px;
+            margin-bottom: 1.2em; text-shadow: 0 2px 12px #222a; }
+        .start-btn, .nav-btn { font-family: inherit; font-size: 1.15em; border: none; border-radius: 12px;
+            padding: 12px 32px; margin: 18px 0 0 0; background: linear-gradient(90deg, #fff 0%, #e0e0e0 100%);
+            color: #0a1833; font-weight: bold; box-shadow: 0 2px 12px rgba(10,24,51,0.10); cursor: pointer;
+            transition: background 0.18s, color 0.18s, transform 0.12s; }
+        .start-btn:hover, .nav-btn:hover { background: linear-gradient(90deg, #e0e0e0 0%, #fff 100%);
+            transform: translateY(-2px) scale(1.04); }
+        .question-title { font-size: 1.3em; color: #fff; margin-bottom: 1.2em; text-shadow: 0 2px 8px #222a; }
+        .options-slider { display: flex; align-items: center; justify-content: space-between;
+            margin: 36px 0 18px 0; gap: 0; }
+        .slider-label { font-size: 1.08em; margin-top: 8px; font-weight: bold; color: #b44143;
+            width: 48px; text-align: center; }
+        .slider-label.right { color: #62b283; }
+        .progress-bar { width: 100%; background: rgba(255,255,255,0.18); border-radius: 6px; height: 10px;
+            margin-bottom: 18px; overflow: hidden; }
+        .progress { height: 100%; background: linear-gradient(90deg, #ffe7ba 0%, #7f53ac 100%);
+            border-radius: 6px; transition: width 0.3s; }
+        .error { color: #ffe066; margin-top: 10px; min-height: 24px; }
+        ul { text-align: left; padding-left: 1.2em; color: #fff; }
+        .result-title { color: #ffe7ba; margin-bottom: 1em; }
+        .bar-chart-row {
+            display: flex; align-items: center; margin-bottom: 8px;
+        }
+        .bar-label {
+            display: inline-block; width: 48px; color: #ffe7ba; font-weight: bold; font-size: 1.08em;
+        }
+        .bar-bg {
+            background: rgba(255,255,255,0.12);
+            border-radius: 6px;
+            height: 18px;
+            width: 240px;
+            margin: 0 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bar-inner {
+            background: linear-gradient(90deg, #62b283 0%, #ffe7ba 100%);
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s;
+        }
+        .bar-value {
+            margin-left: 8px; color: #ffe7ba; font-size: 1.08em;
+        }
+        /* 新选项卡片样式 */
         .option-card-group {
-    display: flex; flex: 1; justify-content: space-between; align-items: stretch; gap: 12px;
-    margin: 0 8px;
-}
-.option-card {
-    flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(20,32,60,0.22) 60%, rgba(98,178,131,0.10) 100%);
-    border-radius: 18px;
-    min-width: 0;
-    min-height: 72px;
-    padding: 12px 6px 10px 6px;
-    margin: 0;
-    border: 2.5px solid transparent;
-    box-shadow: 0 2px 12px 0 rgba(31,38,135,0.10);
-    cursor: pointer;
-    transition: border-color 0.18s, box-shadow 0.18s, background 0.18s, transform 0.12s;
-    font-size: 1.14em;
-    color: #f8f8ff;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-shadow: 0 1px 6px #222a;
-    outline: none;
-    position: relative;
-}
-.option-card.selected {
-    border-color: #62b283;
-    background: linear-gradient(135deg, rgba(98,178,131,0.22) 60%, rgba(255,231,186,0.18) 100%);
-    color: #ffe7ba;
-    font-weight: bold;
-    box-shadow: 0 4px 18px 0 rgba(98,178,131,0.18);
-    transform: scale(1.04);
-}
-.option-card:active {
-    transform: scale(0.98);
-}
-.option-card .option-dot {
-    width: 18px; height: 18px; border-radius: 50%; margin-bottom: 8px;
-    border: 2.5px solid #e0e0e0; background: #fff; box-shadow: 0 1px 6px #222a22;
-    transition: border-color 0.18s, background 0.18s;
-}
-.option-card.selected .option-dot {
-    background: #62b283;
-    border-color: #62b283;
-}
-@media (max-width: 600px) {
-    .option-card-group { gap: 4px; }
-    .option-card { min-height: 48px; font-size: 0.98em; padding: 8px 2px 8px 2px; }
-    .option-card .option-dot { width: 12px; height: 12px; }
-}
+            display: flex; flex: 1; justify-content: space-between; align-items: stretch; gap: 12px;
+            margin: 0 8px;
+        }
+        .option-card {
+            flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, rgba(20,32,60,0.22) 60%, rgba(98,178,131,0.10) 100%);
+            border-radius: 18px;
+            min-width: 0;
+            min-height: 72px;
+            padding: 12px 6px 10px 6px;
+            margin: 0;
+            border: 2.5px solid transparent;
+            box-shadow: 0 2px 12px 0 rgba(31,38,135,0.10);
+            cursor: pointer;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s, transform 0.12s;
+            font-size: 1.14em;
+            color: #f8f8ff;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 6px #222a;
+            outline: none;
+            position: relative;
+        }
+        .option-card.selected {
+            border-color: #62b283;
+            background: linear-gradient(135deg, rgba(98,178,131,0.22) 60%, rgba(255,231,186,0.18) 100%);
+            color: #ffe7ba;
+            font-weight: bold;
+            box-shadow: 0 4px 18px 0 rgba(98,178,131,0.18);
+            transform: scale(1.04);
+        }
+        .option-card:active {
+            transform: scale(0.98);
+        }
+        .option-card .option-dot {
+            width: 18px; height: 18px; border-radius: 50%; margin-bottom: 8px;
+            border: 2.5px solid #e0e0e0; background: #fff; box-shadow: 0 1px 6px #222a22;
+            transition: border-color 0.18s, background 0.18s;
+        }
+        .option-card.selected .option-dot {
+            background: #62b283;
+            border-color: #62b283;
+        }
+        @media (max-width: 600px) {
+            .center-card { padding: 18px 4vw 18px 4vw; }
+            .title { font-size: 1.2em; }
+            .question-title { font-size: 1em; }
+            .slider-label { font-size: 0.95em; width: 36px; }
+            .bar-bg { width: 120px; }
+            .option-card-group { gap: 4px; }
+            .option-card { min-height: 48px; font-size: 0.98em; padding: 8px 2px 8px 2px; }
+            .option-card .option-dot { width: 12px; height: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -150,37 +212,37 @@
             `;
         }
         function showQuestion(errorMsg = '') {
-    let progress = Math.round((current + 1) / questions.length * 100);
-    let leftLabel = `<div class="slider-label">完全不符合</div>`;
-    let rightLabel = `<div class="slider-label right">非常同意</div>`;
-    let optionHtml = options.map((opt, idx) => `
-        <button
-            class="option-card${answers[current] === opt.value ? ' selected' : ''}"
-            onclick="selectOption(${opt.value})"
-            type="button"
-            aria-label="${opt.text}"
-        >
-            <div class="option-dot"></div>
-            <span>${opt.text}</span>
-        </button>
-    `).join('');
-    document.getElementById('quiz-app').innerHTML = `
-        <div class="center-card">
-            <div class="progress-bar"><div class="progress" style="width:${progress}%;"></div></div>
-            <div class="question-title">${questions[current].text}</div>
-            <div class="options-slider">
-                ${leftLabel}
-                <div class="option-card-group">${optionHtml}</div>
-                ${rightLabel}
-            </div>
-            <div class="btn-group" style="margin-top:24px;">
-                <button class="nav-btn" onclick="prevQuestion()" ${current === 0 ? 'disabled' : ''}>上一题</button>
-                <button class="nav-btn" onclick="nextQuestion()">${current === questions.length - 1 ? '提交' : '下一题'}</button>
-            </div>
-            <div class="error">${errorMsg}</div>
-        </div>
-    `;
-}
+            let progress = Math.round((current + 1) / questions.length * 100);
+            let leftLabel = `<div class="slider-label">完全不符合</div>`;
+            let rightLabel = `<div class="slider-label right">非常同意</div>`;
+            let optionHtml = options.map((opt, idx) => `
+                <button
+                    class="option-card${answers[current] === opt.value ? ' selected' : ''}"
+                    onclick="selectOption(${opt.value})"
+                    type="button"
+                    aria-label="${opt.text}"
+                >
+                    <div class="option-dot"></div>
+                    <span>${opt.text}</span>
+                </button>
+            `).join('');
+            document.getElementById('quiz-app').innerHTML = `
+                <div class="center-card">
+                    <div class="progress-bar"><div class="progress" style="width:${progress}%;"></div></div>
+                    <div class="question-title">${questions[current].text}</div>
+                    <div class="options-slider">
+                        ${leftLabel}
+                        <div class="option-card-group">${optionHtml}</div>
+                        ${rightLabel}
+                    </div>
+                    <div class="btn-group" style="margin-top:24px;">
+                        <button class="nav-btn" onclick="prevQuestion()" ${current === 0 ? 'disabled' : ''}>上一题</button>
+                        <button class="nav-btn" onclick="nextQuestion()">${current === questions.length - 1 ? '提交' : '下一题'}</button>
+                    </div>
+                    <div class="error">${errorMsg}</div>
+                </div>
+            `;
+        }
         function selectOption(val) {
             answers[current] = val;
             if (current < questions.length - 1) {
@@ -304,25 +366,25 @@
             }
 
             // 匹配人格类型
-let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
-let typeScores = [];
-for (let type in typeTable) {
-    let typeFuncs = typeTable[type].slice(0, 4);
-    let score = mainSeq.reduce((acc, f, i) => acc + (f === typeFuncs[i] ? 1 : 0), 0);
-    typeScores.push({type, score});
-}
-typeScores.sort((a, b) => b.score - a.score);
-let bestType = typeScores[0]?.type;
-let top3 = typeScores.slice(0, 3);
+            let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
+            let typeScores = [];
+            for (let type in typeTable) {
+                let typeFuncs = typeTable[type].slice(0, 4);
+                let score = mainSeq.reduce((acc, f, i) => acc + (f === typeFuncs[i] ? 1 : 0), 0);
+                typeScores.push({type, score});
+            }
+            typeScores.sort((a, b) => b.score - a.score);
+            let bestType = typeScores[0]?.type;
+            let top3 = typeScores.slice(0, 3);
 
-// === 自动补全第5~8位功能 ===
-if (bestType) {
-    let bestFuncs = typeTable[bestType];
-    positions[4] = bestFuncs[4] || positions[4];
-    positions[5] = bestFuncs[5] || "";
-    positions[6] = bestFuncs[6] || "";
-    positions[7] = bestFuncs[7] || positions[7];
-}
+            // === 自动补全第5~8位功能 ===
+            if (bestType) {
+                let bestFuncs = typeTable[bestType];
+                positions[4] = bestFuncs[4] || positions[4];
+                positions[5] = bestFuncs[5] || "";
+                positions[6] = bestFuncs[6] || "";
+                positions[7] = bestFuncs[7] || positions[7];
+            }
             let resultHtml = `
                 <li>主导功能(1)：${positions[0]}</li>
                 <li>辅助功能(2)：${positions[1]}</li>
