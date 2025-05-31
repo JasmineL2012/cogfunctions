@@ -15,10 +15,23 @@
         }
         @keyframes bgmove { 0% { background-position: 50% 60%; } 100% { background-position: 50% 40%; } }
         .overlay { position: fixed; inset: 0; background: rgba(10,24,51,0.55); z-index: 0; }
-        .center-card { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
-            background: rgba(255,255,255,0.13); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border-radius: 18px; padding: 38px 32px 32px 32px; max-width: 480px; width: 90vw;
-            text-align: center; z-index: 1; backdrop-filter: blur(8px); }
+       .center-card {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(255,255,255,0.13);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border-radius: 18px;
+    padding: 38px 32px 32px 32px;
+    max-width: 1100px;   /* 原来是480px，改大 */
+    width: 92vw;         /* 原来是90vw，略加大 */
+    text-align: center;
+    z-index: 1;
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
         .title { font-size: 2.1em; font-weight: bold; color: #f8f8ff; letter-spacing: 2px;
             margin-bottom: 1.2em; text-shadow: 0 2px 12px #222a; }
         .start-btn, .nav-btn { font-family: inherit; font-size: 1.15em; border: none; border-radius: 12px;
@@ -448,3 +461,4 @@
     </script>
 </body>
 </html>
+1
