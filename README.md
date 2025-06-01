@@ -15,23 +15,23 @@
         }
         @keyframes bgmove { 0% { background-position: 50% 60%; } 100% { background-position: 50% 40%; } }
         .overlay { position: fixed; inset: 0; background: rgba(10,24,51,0.55); z-index: 0; }
-       .center-card {
-    position: absolute;
-    left: 50%; top: 50%;
-    transform: translate(-50%,-50%);
-    background: rgba(255,255,255,0.13);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    border-radius: 18px;
-    padding: 38px 32px 32px 32px;
-    max-width: 1100px;   /* 原来是480px，改大 */
-    width: 92vw;         /* 原来是90vw，略加大 */
-    text-align: center;
-    z-index: 1;
-    backdrop-filter: blur(8px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .center-card {
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%,-50%);
+            background: rgba(255,255,255,0.13);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 18px;
+            padding: 38px 32px 32px 32px;
+            max-width: 1100px;
+            width: 92vw;
+            text-align: center;
+            z-index: 1;
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         .title { font-size: 2.1em; font-weight: bold; color: #f8f8ff; letter-spacing: 2px;
             margin-bottom: 1.2em; text-shadow: 0 2px 12px #222a; }
         .start-btn, .nav-btn { font-family: inherit; font-size: 1.15em; border: none; border-radius: 12px;
@@ -43,44 +43,67 @@
         .question-title { font-size: 1.3em; color: #fff; margin-bottom: 1.2em; text-shadow: 0 2px 8px #222a; }
         .options-slider { display: flex; align-items: center; justify-content: space-between;
             margin: 36px 0 18px 0; gap: 0; }
-        .slider-label { font-size: 1.08em; margin-top: 8px; font-weight: bold; color: #b44143;
-            width: 48px; text-align: center; }
+        .slider-label {
+            font-size: 1.08em; margin-top: 8px; font-weight: bold;
+            width: 48px; text-align: center; letter-spacing: 2px;
+            background: rgba(255,255,255,0.10);
+            border-radius: 10px;
+            padding: 4px 0;
+            box-shadow: 0 2px 8px 0 rgba(31,38,135,0.07);
+        }
         .slider-label.right { color: #62b283; }
-        .slider-radio-group { display: flex; flex: 1; justify-content: space-between; align-items: center;
-            position: relative; margin: 0 8px; }
+        .slider-label { color: #b44143; }
+        .slider-radio-group {
+            display: flex; flex: 1; justify-content: space-between; align-items: center;
+            position: relative; margin: 0 8px;
+            gap: 18px;
+        }
         .slider-radio-group::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 4px;
             background: linear-gradient(90deg, #b44143 0%, #dda95f 25%, #e0e0e0 50%, #4ba694 75%, #62b283 100%);
             z-index: 0; transform: translateY(-50%); border-radius: 2px; }
         .slider-radio {
-            position: relative; z-index: 1; border: none; outline: none; cursor: pointer;
-            padding: 0; margin: 0 0.5vw; background: none;
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            transition: transform 0.18s;
         }
-        .slider-radio-inner {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(20,32,60,0.18);
-            border-radius: 14px;
-            min-width: 64px;
-            padding: 8px 0 4px 0;
-            transition: background 0.18s;
+        .slider-radio .slider-radio-inner {
+            background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(98,178,131,0.09) 100%);
+            border-radius: 50%;
+            min-width: 48px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 12px 0 rgba(31,38,135,0.10);
+            transition: background 0.18s, box-shadow 0.18s;
+            border: 2px solid rgba(255,255,255,0.18);
         }
         .slider-radio.selected .slider-radio-inner {
-            background: rgba(98,178,131,0.18);
+            background: linear-gradient(180deg, #62b283 0%, #ffe7ba 100%);
+            box-shadow: 0 0 0 4px rgba(98,178,131,0.18);
+            border: 2.5px solid #ffe7ba;
         }
-        .slider-radio-circle {
-            width: 32px; height: 32px; border-radius: 50%; border: 2.5px solid #e0e0e0; background: #f8f8ff;
-            display: flex; align-items: center; justify-content: center; transition: border-color 0.18s, box-shadow 0.18s;
-            box-shadow: 0 2px 8px rgba(10,24,51,0.10);
+        .slider-radio .slider-radio-circle {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 2.5px solid #e0e0e0; background: #f8f8ff;
+            display: flex; align-items: center; justify-content: center;
+            transition: border-color 0.18s, box-shadow 0.18s;
         }
-        .slider-radio.selected .slider-radio-circle { border-color: #62b283; box-shadow: 0 0 0 4px rgba(98,178,131,0.18); }
-        .slider-radio.red .slider-radio-circle { border-color: #b44143; }
-        .slider-radio.orange .slider-radio-circle { border-color: #dda95f; }
-        .slider-radio.gray .slider-radio-circle { border-color: #e0e0e0; }
-        .slider-radio.blue .slider-radio-circle { border-color: #4ba694; }
-        .slider-radio.green .slider-radio-circle { border-color: #62b283; }
-        .slider-radio.selected .slider-radio-circle { background: #62b283; }
-        .slider-radio-circle-inner { width: 14px; height: 14px; border-radius: 50%; background: #fff; opacity: 0;
-            transition: opacity 0.18s; }
-        .slider-radio.selected .slider-radio-circle-inner { opacity: 1; background: #fff; }
+        .slider-radio.selected .slider-radio-circle {
+            border-color: #62b283;
+            background: #ffe7ba;
+        }
+        .slider-radio .slider-radio-circle-inner {
+            width: 14px; height: 14px; border-radius: 50%; background: #fff; opacity: 0;
+            transition: opacity 0.18s;
+        }
+        .slider-radio.selected .slider-radio-circle-inner {
+            opacity: 1; background: #62b283;
+        }
         .slider-radio-text {
             margin-top: 6px;
             font-size: 1.08em;
@@ -139,8 +162,8 @@
             .bar-bg { width: 120px; }
         }
         @media (max-width: 900px) {
-    .center-card { flex-direction: column !important; max-width: 98vw !important; }
-}
+            .center-card { flex-direction: column !important; max-width: 98vw !important; }
+        }
     </style>
 </head>
 <body>
@@ -148,7 +171,6 @@
     <div id="quiz-app"></div>
     <script>
         // ===================== 你可以自定义的部分 =====================
-
         const questions = [
     // 外倾思维Te
     { text: "你相信有一个标准能区分大部分行为、事情，而那些符合标准的是好的", func: "Te", polarity: "positive", weight: 1 },
@@ -240,11 +262,43 @@
             ISTP: ["Ti","Se","Ni","Fe","Te","Si","Ne","Fi"],
             ISFP: ["Fi","Se","Ni","Te","Fe","Si","Ne","Ti"]
         };
-        // ===================== 你可以自定义的部分结束 =====================
         let userScores = {};
         functions.forEach(f => userScores[f] = [0,0,0,0,0,0,0,0]);
         let answers = new Array(questions.length).fill(null);
         let current = 0;
+
+        function showStartDialog() {
+            if (document.getElementById('start-dialog')) return;
+            const dialog = document.createElement('div');
+            dialog.id = 'start-dialog';
+            dialog.style.position = 'fixed';
+            dialog.style.left = '0'; dialog.style.top = '0'; dialog.style.width = '100vw'; dialog.style.height = '100vh';
+            dialog.style.background = 'rgba(10,24,51,0.55)';
+            dialog.style.zIndex = '9999';
+            dialog.innerHTML = `
+                <div style="
+                    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+                    background:rgba(255,255,255,0.13);backdrop-filter:blur(8px);
+                    border-radius:18px;box-shadow:0 8px 32px 0 rgba(31,38,135,0.37);
+                    padding:38px 32px 32px 32px;max-width:420px;width:90vw;text-align:left;
+                ">
+                    <div style="color:#ffe7ba;font-size:1.18em;font-weight:bold;margin-bottom:1em;">测试须知</div>
+                    <div style="color:#fff;line-height:1.8;font-size:1.08em;">
+                        1. 部分测试题为深刻了解荣格八维的用户服务，旨在防止用户猜测题目意图。<br>
+                        2. 为保证测试准确性，请以你大多数情况下的做法为准答题，而不是“应该这么做”或“我也可以这么做”。
+                    </div>
+                    <div style="text-align:center;margin-top:2em;">
+                        <button class="start-btn" onclick="closeStartDialogAndBegin()">确认</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(dialog);
+        }
+        function closeStartDialogAndBegin() {
+            const dialog = document.getElementById('start-dialog');
+            if (dialog) dialog.remove();
+            actuallyStartTest();
+        }
         function renderHome() {
             document.getElementById('quiz-app').innerHTML = `
                 <div class="center-card">
@@ -256,8 +310,8 @@
         }
         function showQuestion(errorMsg = '') {
             let progress = Math.round((current + 1) / questions.length * 100);
-            let leftLabel = `<div class="slider-label">完全不符合</div>`;
-            let rightLabel = `<div class="slider-label right">非常同意</div>`;
+            let leftLabel = `<div class="slider-label">否</div>`;
+            let rightLabel = `<div class="slider-label right">是</div>`;
             let sliderHtml = options.map((opt, idx) => `
                 <button
                     class="slider-radio ${opt.color} ${answers[current] === opt.value ? 'selected' : ''}"
@@ -269,7 +323,6 @@
                         <div class="slider-radio-circle">
                             <div class="slider-radio-circle-inner"></div>
                         </div>
-                        <span class="slider-radio-text">${opt.text}</span>
                     </div>
                 </button>
             `).join('');
@@ -317,7 +370,6 @@
                 submitQuiz();
             }
         }
-
         function shuffleQuestions() {
     for (let i = questions.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -326,6 +378,12 @@
 }
         function startTest() {
             shuffleQuestions();
+            current = 0;
+            answers = new Array(questions.length).fill(null);
+            functions.forEach(f => userScores[f] = [0,0,0,0,0,0,0,0]);
+            showQuestion();
+        }
+        function actuallyStartTest() {
             current = 0;
             answers = new Array(questions.length).fill(null);
             functions.forEach(f => userScores[f] = [0,0,0,0,0,0,0,0]);
@@ -421,6 +479,26 @@
             }
             positions[4] = getComplement(main1);
             positions[7] = getComplement(main2);
+
+            // 匹配人格类型，补全5-8功能
+            let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
+            let typeScores = [];
+            for (let type in typeTable) {
+                let typeFuncs = typeTable[type].slice(0, 4);
+                let score = mainSeq.reduce((acc, f, i) => acc + (f === typeFuncs[i] ? 1 : 0), 0);
+                typeScores.push({type, score});
+            }
+            typeScores.sort((a, b) => b.score - a.score);
+            let top3 = typeScores.slice(0, 3);
+            let bestType = top3[0]?.type;
+            if (bestType) {
+                let bestFuncs = typeTable[bestType];
+                positions[4] = bestFuncs[4] || positions[4];
+                positions[5] = bestFuncs[5] || "";
+                positions[6] = bestFuncs[6] || "";
+                positions[7] = bestFuncs[7] || positions[7];
+            }
+
             let resultHtml = `
                 <li>主导功能(1)：${positions[0]}</li>
                 <li>辅助功能(2)：${positions[1]}</li>
@@ -444,24 +522,6 @@
                     </div>
                 `;
             }).join('');
-            // 匹配人格类型
-            let mainSeq = [positions[0], positions[1], positions[2], positions[3]].map(f => f.replace(/[+-]/g, ''));
-            let typeScores = [];
-            for (let type in typeTable) {
-                let typeFuncs = typeTable[type].slice(0, 4);
-                let score = mainSeq.reduce((acc, f, i) => acc + (f === typeFuncs[i] ? 1 : 0), 0);
-                typeScores.push({type, score});
-            }
-            typeScores.sort((a, b) => b.score - a.score);
-            let top3 = typeScores.slice(0, 3);
-            let bestType = top3[0]?.type;
-            if (bestType) {
-                let bestFuncs = typeTable[bestType];
-                positions[4] = bestFuncs[4] || positions[4];
-                positions[5] = bestFuncs[5] || "";
-                positions[6] = bestFuncs[6] || "";
-                positions[7] = bestFuncs[7] || positions[7];
-            }
             let typeHtml = `<p style="color:#ffe7ba;">最有可能的人格类型：</p><ul>${top3.map(t=>`<li><b>${t.type}</b> 匹配分：${t.score}/4</li>`).join('')}</ul>`;
             document.getElementById('quiz-app').innerHTML = `
     <div class="center-card" style="max-width:1100px;display:flex;flex-direction:row;justify-content:space-between;gap:32px;">
@@ -487,4 +547,3 @@
     </script>
 </body>
 </html>
-1
